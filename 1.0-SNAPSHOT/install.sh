@@ -100,7 +100,7 @@ else
   ohai 'Running in non-interactive mode because `$NONINTERACTIVE` is set.'
 fi
 
-ROBOPOST_DEFAULT_DOWNLOAD_URL="https://github.com/gsych/robopost-dist/raw/main/1.0-SNAPSHOT/robopost-1.0-SNAPSHOT.zip"
+ROBOPOST_DEFAULT_DOWNLOAD_URL="https://media.githubusercontent.com/media/gsych/robopost-dist/main/1.0-SNAPSHOT/robopost-1.0-SNAPSHOT.zip"
 
 # USER isn't always set so provide a fall back for the installer and subprocesses.
 if [[ -z "${USER-}" ]]
