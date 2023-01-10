@@ -101,6 +101,7 @@ else
 fi
 
 ROBOPOST_DEFAULT_DOWNLOAD_URL="https://media.githubusercontent.com/media/gsych/robopost-dist/main/1.0-SNAPSHOT/robopost-1.0-SNAPSHOT.zip"
+ROBOPOST_TMP_PATH="/tmp/robopost-1.0-SNAPSHOT.zip"
 
 # USER isn't always set so provide a fall back for the installer and subprocesses.
 if [[ -z "${USER-}" ]]
@@ -279,7 +280,7 @@ fi
 ####################################################################### script
 
 ohai "Downloading a distribution from the ${ROBOPOST_DEFAULT_DOWNLOAD_URL}..."
-execute "curl" "${ROBOPOST_DEFAULT_DOWNLOAD_URL}" "--output" "/tmp/robopost-1.0-SNAPSHOT.zip"
+execute "curl" "${ROBOPOST_DEFAULT_DOWNLOAD_URL}" "--output" "${ROBOPOST_TMP_PATH}"
 
 # shellcheck disable=SC2016
 ohai 'Checking for `sudo` access (which may request your password)...'
@@ -334,6 +335,9 @@ ohai "Installing Robopost..."
   execute_sudo "rm" "-rf" "${ROBOPOST_REPOSITORY}/*"
   execute_sudo "tar" "xvf" "/tmp/robopost-1.0-SNAPSHOT.zip" "-C" "${ROBOPOST_REPOSITORY}/" "--strip-components=1"
 ) || exit 1
+
+ohai "Cleaning up temp files"
+execute "rm" "-rf" "${ROBOPOST_TMP_PATH}"
 
 if [[ ":${PATH}:" != *":${ROBOPOST_BIN}:"* ]]
 then
