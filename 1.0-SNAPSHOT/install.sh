@@ -100,6 +100,8 @@ else
   ohai 'Running in non-interactive mode because `$NONINTERACTIVE` is set.'
 fi
 
+ROBOPOST_DEFAULT_DOWNLOAD_URL="https://github.com/gsych/robopost-dist/raw/main/1.0-SNAPSHOT/robopost-1.0-SNAPSHOT.zip"
+
 # USER isn't always set so provide a fall back for the installer and subprocesses.
 if [[ -z "${USER-}" ]]
 then
@@ -276,6 +278,9 @@ fi
 
 ####################################################################### script
 
+ohai "Downloading a distribution from the ${ROBOPOST_DEFAULT_DOWNLOAD_URL}..."
+execute "curl" "${ROBOPOST_DEFAULT_DOWNLOAD_URL}" "--output" "/tmp/robopost-1.0-SNAPSHOT.zip"
+
 # shellcheck disable=SC2016
 ohai 'Checking for `sudo` access (which may request your password)...'
 
@@ -327,7 +332,7 @@ execute_sudo "${CHOWN[@]}" "-R" "${USER}:${GROUP}" "${ROBOPOST_REPOSITORY}"
 ohai "Installing Robopost..."
 (
   execute_sudo "rm" "-rf" "${ROBOPOST_REPOSITORY}/*"
-  execute_sudo "tar" "xvf" "robopost-1.0-SNAPSHOT.zip" "-C" "${ROBOPOST_REPOSITORY}/" "--strip-components=1"
+  execute_sudo "tar" "xvf" "/tmp/robopost-1.0-SNAPSHOT.zip" "-C" "${ROBOPOST_REPOSITORY}/" "--strip-components=1"
 ) || exit 1
 
 if [[ ":${PATH}:" != *":${ROBOPOST_BIN}:"* ]]
